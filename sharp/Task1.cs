@@ -1,4 +1,5 @@
-namespace Base {
+namespace Task1
+{
   class QuattroFormaggi
   {
     private const string pizzaName = "4 сыра";
@@ -21,25 +22,39 @@ namespace Base {
 
     public QuattroFormaggi(int diameter, int dough, int crust, int souceIncluded)
     {
-      Diameter = diameter switch
+      switch (diameter)
       {
-        0 => 16,
-        1 => 24,
-        2 => 32,
-        _ => 24,
+        case 0:
+          Diameter = 16;
+          break;
+        case 1:
+          Diameter = 24;
+          break;
+        case 2:
+          Diameter = 32;
+          break;
       };
-      Dough = dough switch
+
+      switch (dough)
       {
-        0 => "тонкое",
-        1 => "стандартное",
-        _ => "стандартное",
-      };
-      Crust = crust switch
+        case 0:
+          Dough = "тонкое";
+          break;
+        case 1:
+          Dough = "стандартное";
+          break;
+      }
+
+      switch (crust)
       {
-        0 => "стандартная",
-        1 => "сырная",
-        _ => "стандартная",
-      };
+        case 0:
+          Crust = "стандартная";
+          break;
+        case 1:
+          Crust = "сырная";
+          break;
+      }
+
       SouceIncluded = Convert.ToBoolean(souceIncluded);
     }
 
