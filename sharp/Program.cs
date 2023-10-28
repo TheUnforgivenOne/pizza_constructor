@@ -2,6 +2,6 @@ class Program
 {
   static void Main()
   {
-    Task3.Runner.Run();
+    Task2.Runner.Run();
   }
 }

@@ -131,37 +131,116 @@ namespace Task2
     }
   }
 
-  sealed class Hawaii : Pizza
+  class Margarita : Pizza
   {
-    public override string PizzaName { get { return "Гавайская"; } }
-    private const bool AnanasIncluded = true;
+    public override string PizzaName { get { return "Маргарита"; } }
+    private bool ExtraCheese { get; set; }
 
-    public Hawaii(int diameter, string dough, string crust) : base(diameter, dough, crust)
+    public Margarita(int diameter, string dough, string crust) : base(diameter, dough, crust)
     {
     }
 
-    public Hawaii(int diameter, int dough, int crust) : base(diameter, dough, crust)
+    public Margarita(int diameter, int dough, int crust) : base(diameter, dough, crust)
     {
     }
 
-    public Hawaii() : base()
+    public Margarita() : base()
     {
     }
 
     public override string ToString()
     {
       return $"Пицца {PizzaName}.\nДиаметр: {Diameter}\nТесто: {Dough}\n" +
-      $"Корка: {Crust}\nАнанасы: {AnanasIncluded}";
+      $"Корка: {Crust}\nДополнительный сыр: {ExtraCheese}";
     }
 
-    public void RemoveAnanas()
+    public void AddExtraCheese()
     {
-      Console.WriteLine("\nЭто Гавайская пицца, смирись\n");
+
+      if (isBaked || isSliced || isEaten)
+      {
+        Console.WriteLine("\nСлишком поздно, пицца уже готова, а может быть и съедена\n");
+      }
+      else if (ExtraCheese)
+      {
+        Console.WriteLine("\nДополнительный сыр уже добавлен!\n");
+      }
+      else
+      {
+        ExtraCheese = true;
+        Console.WriteLine("\nВы добавили дополнительный сыр\n");
+      }
     }
 
     public override string ClassName()
     {
-      return base.ClassName() + " -> Class \"Hawaii\"";
+      return base.ClassName() + " -> Class \"Margarita\"";
+    }
+  }
+
+  class Meat : Margarita
+  {
+    public override string PizzaName { get { return "Мясная"; } }
+    protected int MeatAmount { get; set; }
+    protected virtual int MaxMeat { get; set; } = 128;
+
+    public Meat(int diameter, string dough, string crust, int meatAmount)
+      : base(diameter, dough, crust)
+    {
+      MeatAmount = meatAmount;
+    }
+
+    public Meat(int diameter, int dough, int crust, int meatAmount)
+      : base(diameter, dough, crust)
+    {
+      switch (meatAmount)
+      {
+        case 0:
+          MeatAmount = 8;
+          break;
+        case 1:
+          MeatAmount = 16;
+          break;
+        case 2:
+          MeatAmount = 32;
+          break;
+        default:
+          MeatAmount = 16;
+          break;
+      }
+    }
+
+    public Meat() : base()
+    {
+      MeatAmount = 16;
+    }
+
+    public void AddMoreMeat()
+    {
+      if (isBaked || isSliced || isEaten)
+      {
+        Console.WriteLine("\nСлишком поздно, пицца уже готова, а может быть и съедена\n");
+      }
+      else if (MeatAmount >= MaxMeat)
+      {
+        Console.WriteLine("\nСлишком много мяса! Больше добваить нельзя\n");
+      }
+      else
+      {
+        MeatAmount *= 2;
+        Console.WriteLine("\nКоличество мяса удвоено!\n");
+      }
+    }
+
+    public override string ToString()
+    {
+      return $"Пицца {PizzaName}.\nДиаметр: {Diameter}\nТесто: {Dough}\n" +
+      $"Корка: {Crust}\nКоличество мяса: {MeatAmount}";
+    }
+
+    public override string ClassName()
+    {
+      return base.ClassName() + " -> Class \"Meat\"";
     }
   }
 
@@ -243,121 +322,65 @@ namespace Task2
     }
   }
 
-  class Pepperoni : Pizza
+  sealed class Fungi : Pizza
   {
-    public override string PizzaName { get { return "Пепперони"; } }
-    protected int PepperoniAmount { get; set; }
-    protected virtual int MaxPepperoni { get; set; } = 128;
+    public override string PizzaName { get { return "Прошутто Фунги"; } }
+    protected int HamAmount { get; set; }
 
-    public Pepperoni(int diameter, string dough, string crust, int pepperoniAmount)
+
+    public Fungi(int diameter, string dough, string crust, int hamAmount)
       : base(diameter, dough, crust)
     {
-      PepperoniAmount = pepperoniAmount;
+      HamAmount = hamAmount;
     }
 
-    public Pepperoni(int diameter, int dough, int crust, int pepperoniAmount)
+    public Fungi(int diameter, int dough, int crust, int hamAmount)
       : base(diameter, dough, crust)
     {
-      switch (pepperoniAmount)
+      switch (hamAmount)
       {
         case 0:
-          PepperoniAmount = 8;
+          HamAmount = 4;
           break;
         case 1:
-          PepperoniAmount = 16;
+          HamAmount = 8;
           break;
         case 2:
-          PepperoniAmount = 32;
+          HamAmount = 16;
           break;
         default:
-          PepperoniAmount = 16;
+          HamAmount = 8;
           break;
       }
     }
 
-    public Pepperoni() : base()
+    public Fungi() : base()
     {
-      PepperoniAmount = 16;
+      HamAmount = 8;
     }
 
-    public void AddMorePepperoni()
+    public void AddMoreHam()
     {
       if (isBaked || isSliced || isEaten)
       {
         Console.WriteLine("\nСлишком поздно, пицца уже готова, а может быть и съедена\n");
       }
-      else if (PepperoniAmount >= MaxPepperoni)
-      {
-        Console.WriteLine("\nСлишком много пепперони! Больше добваить нельзя\n");
-      }
       else
       {
-        PepperoniAmount *= 2;
-        Console.WriteLine("\nКоличество пепперони удвоено!\n");
+        HamAmount += 4;
+        Console.WriteLine("\nКоличество ветчины увеличено!\n");
       }
     }
 
     public override string ToString()
     {
       return $"Пицца {PizzaName}.\nДиаметр: {Diameter}\nТесто: {Dough}\n" +
-      $"Корка: {Crust}\nКусков пепперони: {PepperoniAmount}";
+      $"Корка: {Crust}\nКоличество ветчины: {HamAmount}";
     }
 
     public override string ClassName()
     {
-      return base.ClassName() + " -> Class \"Pepperoni\"";
-    }
-  }
-
-  class JumboPepperoni : Pepperoni
-  {
-    public override string PizzaName { get { return "Большая пепперони"; } }
-    private bool MushroomsIncluded { get; set; }
-
-    public JumboPepperoni(string dough, string crust, int pepperoniAmount)
-      : base(48, dough, crust, pepperoniAmount * 2)
-    {
-      Diameter = 48;
-      MushroomsIncluded = false;
-    }
-
-    public JumboPepperoni(int dough, int crust, int pepperoniAmount)
-      : base(48, dough, crust, pepperoniAmount)
-    {
-      Diameter = 48;
-      PepperoniAmount *= 2;
-      MushroomsIncluded = false;
-    }
-
-    public JumboPepperoni() : base()
-    {
-      Diameter = 48;
-      PepperoniAmount *= 2;
-      MushroomsIncluded = false;
-    }
-    public void IncreaseDiameter()
-    {
-      Diameter *= 2;
-      MaxPepperoni *= 2;
-      Console.WriteLine("\nУвеличен диаметр пиццы!\n");
-    }
-
-    public void AddMushrooms()
-    {
-      if (MushroomsIncluded)
-      {
-        Console.WriteLine("\nВы уже добваили грибы\n");
-      }
-      else
-      {
-        MushroomsIncluded = true;
-        Console.WriteLine("\nГрибы добавлены\n");
-      }
-    }
-
-    public override string ClassName()
-    {
-      return base.ClassName() + " -> Class \"JumboPepperoni\"";
+      return base.ClassName() + " -> Class \"Fungi\"";
     }
   }
 
@@ -380,10 +403,10 @@ namespace Task2
               Pizza pizza;
 
               Console.WriteLine("\nКакую пиццу готовим?\n" +
-              "0 - Гавайскую\n" +
-              "1 - 4 сыра\n" +
-              "2 - Пепперони\n" +
-              "3 - Огромную пепперони\n");
+              "0 - Маргариту\n" +
+              "1 - Мясную\n" +
+              "2 - 4 сыра\n" +
+              "3 - Прошутто Фунги\n");
 
               int pizzaType = Convert.ToInt16(Console.ReadLine());
 
@@ -391,7 +414,7 @@ namespace Task2
               {
                 case 0:
                   {
-                    Console.WriteLine($"\nГотовим новую пиццу Гавайскую!\n");
+                    Console.WriteLine("\nГотовим новую пиццу Маргариту!\n");
                     Console.WriteLine("\nВыберите конструктор:\n" +
                     "0 - если хотите выбрать параметры пиццы самостоятельно\n" +
                     "1 - если хотите выбрать стандартные параметры пиццы\n");
@@ -417,18 +440,63 @@ namespace Task2
                           "1 - сырная\n");
                           int crust = Convert.ToInt16(Console.ReadLine());
 
-                          pizza = new Hawaii(diameter, dough, crust);
+                          pizza = new Margarita(diameter, dough, crust);
                           break;
                         }
                       default:
                         {
-                          pizza = new Hawaii();
+                          pizza = new Margarita();
                           break;
                         }
                     }
                     break;
                   }
                 case 1:
+                  {
+                    Console.WriteLine("\nГотовим новую пиццу Мясную!\n");
+                    Console.WriteLine("\nВыберите конструктор:\n" +
+                    "0 - если хотите выбрать параметры пиццы самостоятельно\n" +
+                    "1 - если хотите выбрать стандартные параметры пиццы\n");
+
+                    int constructor = Convert.ToInt16(Console.ReadLine());
+                    switch (constructor)
+                    {
+                      case 0:
+                        {
+                          Console.WriteLine("\nВыберите диаметр пиццы:\n" +
+                          "0 - 16см\n" +
+                          "1 - 24см\n" +
+                          "2 - 32см\n");
+                          int diameter = Convert.ToInt16(Console.ReadLine());
+
+                          Console.WriteLine("\nВыберите тесто для пиццы:\n" +
+                          "0 - тонкое\n" +
+                          "1 - стандартное\n");
+                          int dough = Convert.ToInt16(Console.ReadLine());
+
+                          Console.WriteLine("\nВыберите тип корочки для пиццы:\n" +
+                          "0 - стандартная\n" +
+                          "1 - сырная\n");
+                          int crust = Convert.ToInt16(Console.ReadLine());
+
+                          Console.WriteLine("\nСколько мяса добавить?\n" +
+                          "0 - мало\n" +
+                          "1 - нормально\n" +
+                          "2 - много\n");
+                          int meatAmount = Convert.ToInt16(Console.ReadLine());
+
+                          pizza = new Meat(diameter, dough, crust, meatAmount);
+                          break;
+                        }
+                      default:
+                        {
+                          pizza = new Meat();
+                          break;
+                        }
+                    }
+                    break;
+                  }
+                case 2:
                   {
                     Console.WriteLine($"\nГотовим новую пиццу 4 сыра!\n");
                     Console.WriteLine("\nВыберите конструктор:\n" +
@@ -470,11 +538,12 @@ namespace Task2
                           break;
                         }
                     }
+
                     break;
                   }
-                case 2:
+                case 3:
                   {
-                    Console.WriteLine($"\nГотовим новую пиццу пепперони!\n");
+                    Console.WriteLine("\nГотовим новую пиццу Прошутто Фунги!\n");
                     Console.WriteLine("\nВыберите конструктор:\n" +
                     "0 - если хотите выбрать параметры пиццы самостоятельно\n" +
                     "1 - если хотите выбрать стандартные параметры пиццы\n");
@@ -500,64 +569,25 @@ namespace Task2
                           "1 - сырная\n");
                           int crust = Convert.ToInt16(Console.ReadLine());
 
-                          Console.WriteLine("\nСколько пепперони добавить?\n" +
+                          Console.WriteLine("\nСколько ветчины добавить?\n" +
                           "0 - мало\n" +
                           "1 - нормально\n" +
                           "2 - много\n");
-                          int pepperoniAmount = Convert.ToInt16(Console.ReadLine());
+                          int hamAmount = Convert.ToInt16(Console.ReadLine());
 
-                          pizza = new Pepperoni(diameter, dough, crust, pepperoniAmount);
+                          pizza = new Fungi(diameter, dough, crust, hamAmount);
                           break;
                         }
                       default:
                         {
-                          pizza = new Pepperoni();
-                          break;
-                        }
-                    }
-                    break;
-                  }
-                case 3:
-                  {
-                    Console.WriteLine($"\nГотовим новую пиццу БОЛЬШУЮ пепперони!\n");
-                    Console.WriteLine("\nВыберите конструктор:\n" +
-                    "0 - если хотите выбрать параметры пиццы самостоятельно\n" +
-                    "1 - если хотите выбрать стандартные параметры пиццы\n");
-
-                    int constructor = Convert.ToInt16(Console.ReadLine());
-                    switch (constructor)
-                    {
-                      case 0:
-                        {
-                          Console.WriteLine("\nВыберите тесто для пиццы:\n" +
-                          "0 - тонкое\n" +
-                          "1 - стандартное\n");
-                          int dough = Convert.ToInt16(Console.ReadLine());
-
-                          Console.WriteLine("\nВыберите тип корочки для пиццы:\n" +
-                          "0 - стандартная\n" +
-                          "1 - сырная\n");
-                          int crust = Convert.ToInt16(Console.ReadLine());
-
-                          Console.WriteLine("\nСколько пепперони добавить?\n" +
-                          "0 - мало\n" +
-                          "1 - нормально\n" +
-                          "2 - много\n");
-                          int pepperoniAmount = Convert.ToInt16(Console.ReadLine());
-
-                          pizza = new JumboPepperoni(dough, crust, pepperoniAmount);
-                          break;
-                        }
-                      default:
-                        {
-                          pizza = new JumboPepperoni();
+                          pizza = new Fungi();
                           break;
                         }
                     }
                     break;
                   }
                 default:
-                  pizza = new Hawaii();
+                  pizza = new Margarita();
                   break;
               }
 
@@ -579,16 +609,16 @@ namespace Task2
                 Pizza pizza = pizzas[pizzaIndex];
 
                 int pizzaAction;
-                if (pizza.GetType() == typeof(Hawaii))
+                if (pizza.GetType() == typeof(Margarita))
                 {
-                  Hawaii hawaiiPizza = (Hawaii)pizza;
+                  Margarita margaritaPizza = (Margarita)pizza;
                   do
                   {
                     Console.WriteLine("\nДоступные действия:\n" +
                     "0 - приготовить пиццу\n" +
                     "1 - нарезать пиццу\n" +
                     "2 - съесть пиццу\n" +
-                    "3 - убрать ананасы\n" +
+                    "3 - добавить больше сыра\n" +
                     "4 - показать параметры пиццы\n" +
                     "5 - в главное меню\n");
 
@@ -597,16 +627,16 @@ namespace Task2
                     switch (pizzaAction)
                     {
                       case 0:
-                        hawaiiPizza.Bake();
+                        margaritaPizza.Bake();
                         break;
                       case 1:
-                        hawaiiPizza.Slice();
+                        margaritaPizza.Slice();
                         break;
                       case 2:
-                        hawaiiPizza.Eat();
+                        margaritaPizza.Eat();
                         break;
                       case 3:
-                        hawaiiPizza.RemoveAnanas();
+                        margaritaPizza.AddExtraCheese();
                         break;
                       case 4:
                         Console.WriteLine($"\nПараметры пиццы:\n{pizza}\n{pizza.ClassName()}");
@@ -645,16 +675,16 @@ namespace Task2
                     }
                   } while (pizzaAction != 4);
                 }
-                else if (pizza.GetType() == typeof(Pepperoni))
+                else if (pizza.GetType() == typeof(Fungi))
                 {
-                  Pepperoni pepperoniPizza = (Pepperoni)pizza;
+                  Fungi fungiPizza = (Fungi)pizza;
                   do
                   {
                     Console.WriteLine("\nДоступные действия:\n" +
                     "0 - приготовить пиццу\n" +
                     "1 - нарезать пиццу\n" +
                     "2 - съесть пиццу\n" +
-                    "3 - добавить больше пепперони\n" +
+                    "3 - добавить больше ветчины\n" +
                     "4 - показать параметры пиццы\n" +
                     "5 - в главное меню\n");
 
@@ -663,16 +693,16 @@ namespace Task2
                     switch (pizzaAction)
                     {
                       case 0:
-                        pepperoniPizza.Bake();
+                        fungiPizza.Bake();
                         break;
                       case 1:
-                        pepperoniPizza.Slice();
+                        fungiPizza.Slice();
                         break;
                       case 2:
-                        pepperoniPizza.Eat();
+                        fungiPizza.Eat();
                         break;
                       case 3:
-                        pepperoniPizza.AddMorePepperoni();
+                        fungiPizza.AddMoreHam();
                         break;
                       case 4:
                         Console.WriteLine($"\nПараметры пиццы:\n{pizza}\n{pizza.ClassName()}");
@@ -680,17 +710,17 @@ namespace Task2
                     }
                   } while (pizzaAction != 5);
                 }
-                else if (pizza.GetType() == typeof(JumboPepperoni))
+                else if (pizza.GetType() == typeof(Meat))
                 {
-                  JumboPepperoni jumboPepperoniPizza = (JumboPepperoni)pizza;
+                  Meat meatPizza = (Meat)pizza;
                   do
                   {
                     Console.WriteLine("\nДоступные действия:\n" +
                     "0 - приготовить пиццу\n" +
                     "1 - нарезать пиццу\n" +
                     "2 - съесть пиццу\n" +
-                    "3 - добавить больше пепперони\n" +
-                    "4 - добавить грибы\n" +
+                    "3 - добавить больше сыра\n" +
+                    "4 - добавить больше мяса\n" +
                     "5 - показать параметры пиццы\n" +
                     "6 - в главное меню\n");
 
@@ -699,19 +729,19 @@ namespace Task2
                     switch (pizzaAction)
                     {
                       case 0:
-                        jumboPepperoniPizza.Bake();
+                        meatPizza.Bake();
                         break;
                       case 1:
-                        jumboPepperoniPizza.Slice();
+                        meatPizza.Slice();
                         break;
                       case 2:
-                        jumboPepperoniPizza.Eat();
+                        meatPizza.Eat();
                         break;
                       case 3:
-                        jumboPepperoniPizza.AddMorePepperoni();
+                        meatPizza.AddExtraCheese();
                         break;
                       case 4:
-                        jumboPepperoniPizza.AddMushrooms();
+                        meatPizza.AddMoreMeat();
                         break;
                       case 5:
                         Console.WriteLine($"\nПараметры пиццы:\n{pizza}\n{pizza.ClassName()}");
