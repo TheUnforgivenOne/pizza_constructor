@@ -2,11 +2,11 @@
 {
   interface IEatable
   {
-    public void Bake();
-    public void Slice();
-    public void Eat();
-    public string ToString();
-    public string ClassName();
+    void Bake();
+    void Slice();
+    void Eat();
+    string ToString();
+    string ClassName();
   }
 
   class Hinkali : IEatable
